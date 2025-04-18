@@ -1,6 +1,7 @@
 from flask import Flask, jsonify
 from scrape import MLHScraper
 import time
+import requests
 
 app = Flask(__name__)
 scraper = MLHScraper()
@@ -49,6 +50,43 @@ def get_hackathons_by_source(source):
             'status': 'error',
             'message': str(e)
         }), 500
+
+@app.route('/api/clear-cache', methods=['GET'])
+def clear_cache():
+    cache['data'] = None
+    cache['last_update'] = 0
+    return jsonify({
+        'status': 'success',
+        'message': 'Cache cleared successfully'
+    })
+
+@app.route('/api/connectivity-check', methods=['GET'])
+def connectivity_check():
+    results = {}
+    urls = [
+        "https://www.google.com",
+        "https://www.hackerearth.com",
+        "https://mlh.io"
+    ]
+    
+    for url in urls:
+        try:
+            response = requests.get(url, timeout=10)
+            results[url] = {
+                "status": "success",
+                "status_code": response.status_code,
+                "content_length": len(response.content)
+            }
+        except Exception as e:
+            results[url] = {
+                "status": "error",
+                "message": str(e)
+            }
+    
+    return jsonify({
+        "status": "success",
+        "results": results
+    })
 
 if __name__ == '__main__':
     app.run(debug=True, port=5000)

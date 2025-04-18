@@ -134,15 +134,20 @@ class MLHScraper:
                     hackathons.append(hackathon)
         
         # Scrape HackerEarth events
+        print(f"Attempting to fetch HackerEarth data from {self.hackerearth_url}")
         he_content = self.fetch_page(self.hackerearth_url)
         if he_content:
+            print(f"Successfully fetched HackerEarth content, length: {len(he_content)}")
             soup = BeautifulSoup(he_content, 'html.parser')
             he_events = soup.find_all("div", class_="challenge-card-modern")
+            print(f"Found {len(he_events)} HackerEarth events")
             
             for event_div in he_events:
                 hackathon = self.parse_hackerearth_hackathon(event_div)
                 if hackathon:
                     hackathons.append(hackathon)
+        else:
+            print("Failed to fetch HackerEarth content")
         
         # Save to cache before returning
         self.save_to_cache(hackathons)
