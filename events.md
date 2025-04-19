@@ -478,7 +478,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Participating">
-                    <i class="fa fa-user"></i> 5142
+                    <i class="fa fa-user"></i> 5254
                 </div>
             
             </div>
@@ -535,7 +535,7 @@
 <script type="text/javascript">
     
         // Get how many seconds are left to the event start.
-        var seconds_left = 1745173740 - 1744893276;
+        var seconds_left = 1745173740 - 1745038815;
         var countdown_elem = $('#countdown-2417296');
         var hide_element = $('.challenge-card-modern');
         var show_text = null;
@@ -575,7 +575,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Participating">
-                    <i class="fa fa-user"></i> 1561
+                    <i class="fa fa-user"></i> 1578
                 </div>
             
             </div>
@@ -632,7 +632,7 @@
 <script type="text/javascript">
     
         // Get how many seconds are left to the event start.
-        var seconds_left = 1745305140 - 1744893276;
+        var seconds_left = 1745305140 - 1745038815;
         var countdown_elem = $('#countdown-2405014');
         var hide_element = $('.challenge-card-modern');
         var show_text = null;
@@ -672,7 +672,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Participating">
-                    <i class="fa fa-user"></i> 977
+                    <i class="fa fa-user"></i> 989
                 </div>
             
             </div>
@@ -729,7 +729,7 @@
 <script type="text/javascript">
     
         // Get how many seconds are left to the event start.
-        var seconds_left = 1745380740 - 1744893276;
+        var seconds_left = 1745380740 - 1745038815;
         var countdown_elem = $('#countdown-2387325');
         var hide_element = $('.challenge-card-modern');
         var show_text = null;
@@ -769,7 +769,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Registered">
-                    <i class="fa fa-user"></i> 1992
+                    <i class="fa fa-user"></i> 2023
                 </div>
             
             </div>
@@ -826,7 +826,7 @@
 <script type="text/javascript">
     
         // Get how many seconds are left to the event start.
-        var seconds_left = 1745391300 - 1744893276;
+        var seconds_left = 1745391300 - 1745038815;
         var countdown_elem = $('#countdown-2409739');
         var hide_element = $('.challenge-card-modern');
         var show_text = null;
@@ -866,7 +866,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Participating">
-                    <i class="fa fa-user"></i> 1607
+                    <i class="fa fa-user"></i> 1651
                 </div>
             
             </div>
@@ -923,7 +923,7 @@
 <script type="text/javascript">
     
         // Get how many seconds are left to the event start.
-        var seconds_left = 1746417540 - 1744893276;
+        var seconds_left = 1746417540 - 1745038815;
         var countdown_elem = $('#countdown-2423930');
         var hide_element = $('.challenge-card-modern');
         var show_text = null;
@@ -971,7 +971,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Registered">
-                    <i class="fa fa-user"></i> 35
+                    <i class="fa fa-user"></i> 60
                 </div>
             
             </div>
@@ -1034,7 +1034,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Registered">
-                    <i class="fa fa-user"></i> 666
+                    <i class="fa fa-user"></i> 698
                 </div>
             
             </div>
@@ -1097,7 +1097,7 @@
             <div class="registrations-container align-center">
             
                 <div class="registrations tool-tip align-left" title="Users Registered">
-                    <i class="fa fa-user"></i> 138
+                    <i class="fa fa-user"></i> 151
                 </div>
             
             </div>
@@ -1461,11 +1461,11 @@
                 </div>
                 <div class="challenge-list-meta challenge-card-wrapper">
                     <div class="challenge-desc light">
-                        <span class="date"><i class="fa fa-calendar"></i>Jan 20, 09:00 AM IST (Asia/Kolkata)</span>
+                        <span class="date"><i class="fa fa-calendar"></i>Jan 20, 2025 IST (Asia/Kolkata)</span>
                         
                             <span class="type"><i class="fa fa-trophy"></i>Prizes</span>
                             
-                            <span class="reg tool-tip" title="Users Participating"><i class="fa fa-user"></i>3222</span>
+                            <span class="reg tool-tip" title="Users Registered"><i class="fa fa-user"></i>3222</span>
                             
                         
                     </div>

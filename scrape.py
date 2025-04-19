@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import random
 import os
+import re
 
 class MLHScraper:
     def __init__(self):
@@ -106,6 +107,94 @@ class MLHScraper:
             print(f"Error parsing HackerEarth hackathon: {e}")
             return None
 
+    def parse_hackerearth_from_ldjson(self, soup):
+        """Parse HackerEarth hackathons from LD+JSON data embedded in the page"""
+        hackathons = []
+        
+        # Find all script tags with type application/ld+json
+        ld_json_tags = soup.find_all('script', type='application/ld+json')
+        print(f"Found {len(ld_json_tags)} LD+JSON script tags")
+        
+        for script in ld_json_tags:
+            try:
+                # Extract the JSON data from the script tag
+                json_text = script.string
+                if not json_text:
+                    continue
+                
+                # Check if it's an array of events
+                if json_text.strip().startswith('[{'):
+                    events_data = json.loads(json_text)
+                    for event_data in events_data:
+                        if event_data.get('@type') == 'Event':
+                            hackathon = self._extract_hackathon_from_ldjson(event_data)
+                            if hackathon:
+                                hackathons.append(hackathon)
+                # Check if it's a single event
+                elif json_text.strip().startswith('{'):
+                    event_data = json.loads(json_text)
+                    if event_data.get('@type') == 'Event':
+                        hackathon = self._extract_hackathon_from_ldjson(event_data)
+                        if hackathon:
+                            hackathons.append(hackathon)
+            except Exception as e:
+                print(f"Error parsing LD+JSON data: {e}")
+        
+        return hackathons
+    
+    def _extract_hackathon_from_ldjson(self, event_data):
+        """Extract hackathon information from a single LD+JSON event object"""
+        try:
+            # Extract name, replacing "at HackerEarth" if present
+            name = event_data.get('name', '').replace(' at HackerEarth', '')
+            
+            # Extract dates
+            start_date = event_data.get('startDate', '')
+            end_date = event_data.get('endDate', '')
+            
+            # Format date for display
+            date_text = f"Starts: {start_date} - Ends: {end_date}" if start_date and end_date else "Date TBA"
+            
+            # Extract URL
+            url = event_data.get('url', '')
+            
+            # Extract location
+            location = "Online, Worldwide"
+            if 'location' in event_data and 'address' in event_data['location']:
+                address = event_data['location']['address']
+                if 'name' in address and address['name'] != "Online":
+                    location_parts = []
+                    for key in ['name', 'addressLocality', 'addressRegion']:
+                        if key in address and address[key]:
+                            location_parts.append(address[key])
+                    if location_parts:
+                        location = ', '.join(location_parts)
+            
+            # Extract image
+            background_image = event_data.get('image', '')
+            
+            # Get the description
+            description = event_data.get('description', '')
+            
+            return {
+                "name": name,
+                "date": date_text,
+                "location": location,
+                "event_type": "Digital Only",
+                "background_image": background_image,
+                "logo_image": None,
+                "event_url": url,
+                "is_diversity_event": False,
+                "diversity_type": "",
+                "source": "HackerEarth",
+                "description": description,
+                "start_date": start_date,
+                "end_date": end_date,
+            }
+        except Exception as e:
+            print(f"Error extracting hackathon from LD+JSON data: {e}")
+            return None
+
     def scrape_hackathons(self):
         # Check if we need to update cache
         if not self.should_update_cache():
@@ -139,15 +228,38 @@ class MLHScraper:
         if he_content:
             print(f"Successfully fetched HackerEarth content, length: {len(he_content)}")
             soup = BeautifulSoup(he_content, 'html.parser')
-            he_events = soup.find_all("div", class_="challenge-card-modern")
-            print(f"Found {len(he_events)} HackerEarth events")
             
-            for event_div in he_events:
-                hackathon = self.parse_hackerearth_hackathon(event_div)
-                if hackathon:
-                    hackathons.append(hackathon)
+            # Try to get events from LD+JSON data first
+            he_ldjson_events = self.parse_hackerearth_from_ldjson(soup)
+            if he_ldjson_events:
+                print(f"Found {len(he_ldjson_events)} HackerEarth events from LD+JSON data")
+                hackathons.extend(he_ldjson_events)
+            else:
+                # Fall back to parsing HTML if LD+JSON didn't work
+                he_events = soup.find_all("div", class_="challenge-card-modern")
+                print(f"Found {len(he_events)} HackerEarth events from HTML")
+                
+                for event_div in he_events:
+                    hackathon = self.parse_hackerearth_hackathon(event_div)
+                    if hackathon:
+                        hackathons.append(hackathon)
         else:
             print("Failed to fetch HackerEarth content")
+            
+            # If we have events.md file, try parsing that as fallback
+            try:
+                if os.path.exists('events.md'):
+                    print("Attempting to parse local events.md file as fallback")
+                    with open('events.md', 'r', encoding='utf-8') as file:
+                        content = file.read()
+                        
+                    soup = BeautifulSoup(content, 'html.parser')
+                    he_ldjson_events = self.parse_hackerearth_from_ldjson(soup)
+                    if he_ldjson_events:
+                        print(f"Found {len(he_ldjson_events)} HackerEarth events from local events.md file")
+                        hackathons.extend(he_ldjson_events)
+            except Exception as e:
+                print(f"Error parsing local events.md file: {e}")
         
         # Save to cache before returning
         self.save_to_cache(hackathons)
