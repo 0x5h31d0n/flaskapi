@@ -139,6 +139,14 @@ def cache_status():
 if __name__ == '__main__':
     # On startup, make sure we have data
     if not cache['data']:
-        refresh_cache()
+        try:
+            refresh_cache()
+            # Check specifically if we have HackerEarth events
+            hackathons = cache['data']
+            he_events = [h for h in hackathons if h['source'] == 'HackerEarth'] if hackathons else []
+            if not he_events:
+                logger.warning("No HackerEarth events found after cache refresh. Check the scraper implementation.")
+        except Exception as e:
+            logger.error(f"Failed to refresh cache on startup: {str(e)}")
     
     app.run(debug=True, port=5000)
