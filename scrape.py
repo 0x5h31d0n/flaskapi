@@ -22,6 +22,14 @@ class MLHScraper:
                 'mobile': False
             }
         )
+        # Set default headers for all requests
+        self.scraper.headers.update({
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)...",
+            "Accept": "text/html,application/xhtml+xml,...",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://google.com",
+            "DNT": "1",
+        })
 
     def should_update_cache(self):
         if not os.path.exists(self.cache_file):
